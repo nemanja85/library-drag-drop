@@ -1,4 +1,4 @@
-import { DragEvent, FC, ReactNode, useContext } from 'react';
+import { DragEvent, FC, ReactNode, useContext, useRef } from 'react';
 import { DragContext } from './DragContext';
 
 type DragItemProps = {
@@ -7,11 +7,20 @@ type DragItemProps = {
 };
 
 export const DragItem: FC<DragItemProps> = ({ id, children }) => {
-  const { onDragStart, onDragEnd } = useContext(DragContext);
+  const { onDragStart, onDragEnd, onDrop, onDragOver } = useContext(DragContext);
+   const initialPositionRef = useRef<{ x: number; y: number } | null>(null);
 
   const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
     e.dataTransfer.setData('text/plain', id);
     onDragStart(id);
+
+    initialPositionRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+    };
+
+    console.log('X position ', e.clientX);
+    console.log('Y position ', e.clientY);
   };
 
   const handleDragEnd = () => {

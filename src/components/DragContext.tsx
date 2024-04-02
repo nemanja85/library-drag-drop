@@ -1,4 +1,4 @@
-import { createContext, useState, DragEvent, ReactNode, FC } from 'react';
+import { DragEvent, FC, ReactNode, createContext, useState } from 'react';
 
 type DragContextProps = {
   onDragStart: (id: string) => void;
@@ -8,8 +8,8 @@ type DragContextProps = {
 };
 
 type DragContextProviderProps = {
-    children: ReactNode;
-}
+  children: ReactNode;
+};
 
 export const DragContext = createContext<DragContextProps>({
   onDragStart: () => {},
@@ -19,15 +19,22 @@ export const DragContext = createContext<DragContextProps>({
 });
 
 export const DragContextProvider: FC<DragContextProviderProps> = ({ children }) => {
-    const [isDraging, setDraging] = useState(false);
-    const [dragState, setDragState] = useState<DragContextProps>({
-        onDragStart: (id: string) => {
-
-        },
-        onDragEnd: () => {},
-        onDrop: (id: string) => {},
-        onDragOver: (e: DragEvent<HTMLDivElement>) => {},
+  const [dragState, setDragState] = useState<DragContextProps>({
+    onDragStart: (id: string) => {
+      setDragState(dragState);
+    },
+    onDragEnd: () => {
+      setDragState(dragState);
+    },
+    onDrop: () => {
+      setDragState(dragState);
+    },
+    onDragOver: (e: DragEvent<HTMLDivElement>) => {
+      setDragState(dragState);
+    },
   });
+  console.log('Status:', dragState);
+
 
   return <DragContext.Provider value={dragState}>{children}</DragContext.Provider>;
 };
