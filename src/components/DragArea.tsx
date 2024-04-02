@@ -1,40 +1,25 @@
-import { ReactNode, DragEvent, Dispatch, SetStateAction, FC } from "react";
-import { DragContext } from "./DragContext";
+import { DragEvent, ReactNode, useContext } from 'react';
+import { DragContext } from './DragContext';
 
-type DragAreaProps = {
-    children: ReactNode;
-    items: [];
-    onChange: Dispatch<SetStateAction<HTMLUListElement[]>>;
-}
+type DragAreaProps<T> = {
+  items: T[];
+  onChange: (items: T[]) => void;
+  children: ReactNode;
+};
 
+export const DragArea = <T extends any>({ items, onChange, children }: DragAreaProps<T>) => {
+  const { onDrop, onDragOver } = useContext(DragContext);
 
-export const DragArea: FC<DragAreaProps> = ({ children, items, onChange }) => {
-    const { setDraggingId } = DragContext();
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const draggedItemId = e.dataTransfer.getData('text/plain');
+    const newItems = items.filter((item) => item !== draggedItemId);
+    onChange(newItems);
+  };
 
-    const handleDragOver = (e: DragEvent<HTMLUListElement>) => {
-        e.preventDefault();
-    };
-
-    const handleDrop = (e: DragEvent<HTMLUListElement>) => {
-        e.preventDefault();
-        const draggedItemId = e.dataTransfer.getData("text/plain");
-        if (draggedItemId) {
-            const updatedItems = items.filter(item => item.id !== draggedItemId);
-            const draggedItem = items.find(item => item.id === draggedItemId);
-            if (draggedItem) {
-                const dropIndex = Array.from(e.currentTarget.children).findIndex(
-                    (element) => element.contains(e.target as Node)
-                );
-                updatedItems.splice(dropIndex, 0, draggedItem);
-                onChange(updatedItems);
-            }
-        }
-        setDraggingId(null);
-    };
-
-    return (
-        <ul onDragOver={handleDragOver} onDrop={handleDrop}>
-            {children}
-        </ul>
-    );
+  return (
+    <div onDrop={handleDrop} onDragOver={onDragOver}>
+      {children}
+    </div>
+  );
 };

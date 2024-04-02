@@ -1,27 +1,33 @@
-import {createContext, useContext, useState, Dispatch, SetStateAction, FC, ReactNode} from "react";
+import { createContext, useState, DragEvent, ReactNode, FC } from 'react';
 
 type DragContextProps = {
-    draggingId: string | null;
-    setDraggingId: Dispatch<SetStateAction<string | null>>;
-}
+  onDragStart: (id: string) => void;
+  onDragEnd: () => void;
+  onDrop: (id: string) => void;
+  onDragOver: (e: DragEvent<HTMLDivElement>) => void;
+};
 
 type DragContextProviderProps = {
     children: ReactNode;
 }
 
- const dragContext = createContext<DragContextProps | undefined>(undefined);
-
-export const DragContext = () => {
-    const context = useContext(dragContext);
-    return context ? context : (() => { throw new Error("Greška: Context mora biti korišćen u okviru Provajdera!"); })();
-};
+export const DragContext = createContext<DragContextProps>({
+  onDragStart: () => {},
+  onDragEnd: () => {},
+  onDrop: () => {},
+  onDragOver: () => {},
+});
 
 export const DragContextProvider: FC<DragContextProviderProps> = ({ children }) => {
-    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const [isDraging, setDraging] = useState(false);
+    const [dragState, setDragState] = useState<DragContextProps>({
+        onDragStart: (id: string) => {
 
-    return (
-        <dragContext.Provider value={{ draggingId, setDraggingId }}>
-            {children}
-        </dragContext.Provider>
-    );
+        },
+        onDragEnd: () => {},
+        onDrop: (id: string) => {},
+        onDragOver: (e: DragEvent<HTMLDivElement>) => {},
+  });
+
+  return <DragContext.Provider value={dragState}>{children}</DragContext.Provider>;
 };
