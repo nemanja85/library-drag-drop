@@ -1,11 +1,11 @@
 :root {
   --fontColor: #242424;
   --bgColor: #fff;
-   --hoverColor: #ff0000
+  --hoverColor: #ff0000;
 }
 
 body {
-   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
   display: flex;
   place-items: center;
@@ -32,5 +32,3 @@ ul li:hover > * {
   background-color: var(--hoverColor);
   color: var(--bgColor);
 }
-
-

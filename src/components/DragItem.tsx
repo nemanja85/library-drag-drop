@@ -7,8 +7,8 @@ type DragItemProps = {
 };
 
 export const DragItem: FC<DragItemProps> = ({ id, children }) => {
-  const { onDragStart, onDragEnd} = useContext(DragContext);
-   const positions = useRef<{ x: number; y: number } | null>(null);
+  const { onDragStart, onDragEnd } = useContext(DragContext);
+  const positions = useRef<{ x: number; y: number } | null>(null);
 
   const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
     e.dataTransfer.setData('text/plain', id);
@@ -21,14 +21,13 @@ export const DragItem: FC<DragItemProps> = ({ id, children }) => {
   };
 
   const handleDragEnd = (e: DragEvent<HTMLLIElement>) => {
-     e.dataTransfer.setData('text/plain', id);
+    e.dataTransfer.setData('text/plain', id);
     onDragEnd(id);
 
     positions.current = {
       x: e.clientX,
       y: e.clientY,
     };
-
   };
 
   return (
