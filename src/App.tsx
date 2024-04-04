@@ -25,7 +25,7 @@ export const DraggableUserList = () => {
       value={{
         onDragStart: (id: string) => console.log('Drag started for item: ', id),
         onDragEnd: () => console.log('Drag ended'),
-        onDrop: (id: string) => console.log('Item dropped: ', id),
+        onDrop: (id: string) => console.log('Dropped item: ', id),
         onDragOver: (e: React.DragEvent<HTMLDivElement>) => e.preventDefault(),
       }}
     >

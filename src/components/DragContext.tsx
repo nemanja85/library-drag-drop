@@ -2,7 +2,7 @@ import { DragEvent, FC, ReactNode, createContext, useState } from 'react';
 
 type DragContextProps = {
   onDragStart: (id: string) => void;
-  onDragEnd: () => void;
+  onDragEnd: (id: string) => void;
   onDrop: (id: string) => void;
   onDragOver: (e: DragEvent<HTMLDivElement>) => void;
 };
@@ -20,7 +20,7 @@ export const DragContext = createContext<DragContextProps>({
 
 export const DragContextProvider: FC<DragContextProviderProps> = ({ children }) => {
   const [dragState, setDragState] = useState<DragContextProps>({
-    onDragStart: (id: string) => {
+    onDragStart: () => {
       setDragState(dragState);
     },
     onDragEnd: () => {
@@ -29,12 +29,10 @@ export const DragContextProvider: FC<DragContextProviderProps> = ({ children }) 
     onDrop: () => {
       setDragState(dragState);
     },
-    onDragOver: (e: DragEvent<HTMLDivElement>) => {
+    onDragOver: () => {
       setDragState(dragState);
     },
   });
-  console.log('Status:', dragState);
-
 
   return <DragContext.Provider value={dragState}>{children}</DragContext.Provider>;
 };

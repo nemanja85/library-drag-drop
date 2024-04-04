@@ -27,7 +27,8 @@ ul li {
   color: var(--fontColor);
   border-radius: 8px;
 }
-ul li:hover {
+ul li:hover,
+ul li:hover > * {
   background-color: var(--hoverColor);
   color: var(--bgColor);
 }

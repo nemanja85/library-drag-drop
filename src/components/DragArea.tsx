@@ -3,29 +3,29 @@ import { DragContext } from './DragContext';
 
 export type DragAreaProps<T> = {
   items: T[];
-  onChange: (items: T[]) => void;
+  onChange: (updatedItems: T[]) => void;
   children: ReactNode;
 };
 
-export const DragArea = <T extends any>({ items, onChange, children }: DragAreaProps<T>) => {
-  const { onDrop, onDragOver } = useContext(DragContext);
-
+export const DragArea = <T extends { id: string }>({ items, onChange, children }: DragAreaProps<T>) => {
+    const { onDragOver } = useContext(DragContext);
 
  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-
-    let updatedItems = [...items];
     const draggedItemId = e.dataTransfer.getData('text/plain');
-    const newItems = items.filter((item) => item !== draggedItemId);
-    onChange(newItems);
 
-     const draggedIndex = updatedItems.findIndex((item) => item.id === draggedItemId);
-     const droppedIndex = updatedItems.findIndex((item) => item.id === draggedItemId);
+     const draggedIndex = items.findIndex((item) => item.id === draggedItemId);
+     const droppedIndex = parseInt(e.currentTarget.dataset.index || '');
 
-    const [draggedUser] = updatedItems.splice(draggedIndex, 1);
-    updatedItems.splice(droppedIndex, 0, draggedUser);
+     if (draggedIndex === droppedIndex) {
+         return;
+     }
 
-  };
+     const updatedItems = [...items];
+     const [draggedUser] = updatedItems.splice(draggedIndex, 1);
+     updatedItems.splice(droppedIndex, 0, draggedUser);
+     onChange(updatedItems);
+ };
 
   return (
     <div onDrop={handleDrop} onDragOver={onDragOver}>
