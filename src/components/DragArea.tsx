@@ -8,7 +8,15 @@ export type DragAreaProps<T> = {
 };
 
 export const DragArea = <T extends { id: string }>({ items, onChange, children }: DragAreaProps<T>) => {
-  const { onDragOver } = useContext(DragContext);
+  const useDragContext = () => {
+    const context = useContext(DragContext);
+    if (!context) {
+      throw new Error('Context must be used inside the ContextProvider');
+    }
+    return context;
+  };
+
+  const { onDragOver } = useDragContext();
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();

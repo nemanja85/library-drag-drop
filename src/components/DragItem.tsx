@@ -7,7 +7,16 @@ type DragItemProps = {
 };
 
 export const DragItem: FC<DragItemProps> = ({ id, children }) => {
-  const { onDragStart, onDragEnd } = useContext(DragContext);
+  const useDragContext = () => {
+    const context = useContext(DragContext);
+    if (!context) {
+      throw new Error('Context must be used inside the ContextProvider');
+    }
+    return context;
+  };
+
+  const { onDragEnd, onDragStart } = useDragContext();
+
   const positions = useRef<{ x: number; y: number } | null>(null);
 
   const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
