@@ -1,22 +1,24 @@
 
 
-## Clone the project
+## 1.Clone the project
 
 ```sh
 git clone git@github.com:nemanja85/library-drag-drop.git
 ```
+## 2. Navigate to the project directory
 
 ```sh
 cd library-drag-drop
 ```
 
-## Install
+## 3. Install the required dependencies
 
 ```sh
 npm install
 ```
 
-## Getting Started
+# Running the Project
+### To start the project, use the following command:
 
 ```sh
 npm run dev
