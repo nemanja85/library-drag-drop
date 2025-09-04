@@ -11,7 +11,7 @@ export const DragArea = <T extends { id: string }>({ items, onChange, children }
   const useDragContext = () => {
     const context = useContext(DragContext);
     if (!context) {
-      throw new Error('Context must be used inside the ContextProvider');
+      throw new Error('Components DragArea can only use context if they are within a ContextProvider');
     }
     return context;
   };
@@ -23,7 +23,7 @@ export const DragArea = <T extends { id: string }>({ items, onChange, children }
     const draggedItemId = e.dataTransfer.getData('text/plain');
 
     const draggedIndex = items.findIndex((item) => item.id === draggedItemId);
-    const droppedIndex = parseInt(e.currentTarget.dataset.index || '');
+    const droppedIndex = parseInt(e.currentTarget.dataset.index ?? '');
 
     if (draggedIndex === droppedIndex) {
       return;

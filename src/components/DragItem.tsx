@@ -10,7 +10,7 @@ export const DragItem: FC<DragItemProps> = ({ id, children }) => {
   const useDragContext = () => {
     const context = useContext(DragContext);
     if (!context) {
-      throw new Error('Context must be used inside the ContextProvider');
+      throw new Error('Components DragItem can only use context if they are within a ContextProvider');
     }
     return context;
   };

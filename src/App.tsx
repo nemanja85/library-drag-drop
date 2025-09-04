@@ -17,7 +17,6 @@ const UserItem = ({ name, email }: UserProps) => {
 };
 
 export const DraggableUserList = () => {
-  // Example
   const [exampleUsers, setExampleUsers] = useState(users);
 
   return (
