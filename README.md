@@ -1,25 +1,25 @@
 
 
-# Library Drag & Drop
+# Library Drag & Drop List
 
-A simple and lightweight React library for implementing drag-and-drop functionality in your lists.
+A lightweight, zero-dependency React library for implementing fluid, native drag-and-drop reordering in your lists.
 
-## Description
+## Overview
 
-This project provides a set of React components (`DragContext`, `DragArea`, and `DragItem`) that leverage the native HTML5 Drag and Drop API to enable reordering of items within a list. It's designed to be easy to integrate and highly customizable.
+This library provides a set of highly composable React components (DragContext, DragArea, and DragItem) built on top of the native HTML5 Drag and Drop API. It abstracts away the complex state management of list reordering, allowing you to build smooth, customizable drag-and-drop interfaces in minutes without bloated external dependencies.
 
 ## Key Features
 
-- **Context-driven:** Uses React Context to manage drag-and-drop state across components.
-- **Lightweight:** Minimal dependencies, focusing on core drag-and-drop logic.
-- **TypeScript Support:** Fully typed for a better developer experience.
-- **Easy to use:** Simple components to wrap your list and items.
+- **ontext-Driven Architecture: Leverages React Context to seamlessly manage drag-and-drop states across your component tree.
+- **Ultra-Lightweight: Zero heavy third-party dependencies, focusing strictly on core performance and native browser capabilities.
+- **First-Class TypeScript Support: Fully typed out-of-the-box for robust autocomplete and compile-time safety.
+- **Developer-Friendly API: Intuitive component wrappers that adapt to your existing UI and layout patterns.
 
 ## Tech Stack
 
 - **React:** Frontend library.
-- **TypeScript:** For static typing.
-- **Vite:** Fast build tool and development server.
+- **TypeScript:** For reliable static typing.
+- **Vite:** Next-generation frontend tooling for rapid development and building.
 - **Tailwind CSS:** For styling (optional but included).
 
 ## Installation and Setup
