@@ -10,14 +10,14 @@ This library provides a set of highly composable React components (DragContext, 
 
 ## Key Features
 
-- **ontext-Driven Architecture: Leverages React Context to seamlessly manage drag-and-drop states across your component tree.
-- **Ultra-Lightweight: Zero heavy third-party dependencies, focusing strictly on core performance and native browser capabilities.
-- **First-Class TypeScript Support: Fully typed out-of-the-box for robust autocomplete and compile-time safety.
-- **Developer-Friendly API: Intuitive component wrappers that adapt to your existing UI and layout patterns.
+- **Context-Driven** **Architecture**: Leverages React Context to seamlessly manage drag-and-drop states across your component tree.
+- **Ultra-Lightweight**: Zero heavy third-party dependencies, focusing strictly on core performance and native browser capabilities.
+- **First-Class** **TypeScript** **Support**: Fully typed out-of-the-box for robust autocomplete and compile-time safety.
+- **Developer-Friendly** **API**: Intuitive component wrappers that adapt to your existing UI and layout patterns.
 
 ## Tech Stack
 
-- **React:** Frontend library.
+- **React**: Frontend library.
 - **TypeScript:** For reliable static typing.
 - **Vite:** Next-generation frontend tooling for rapid development and building.
 - **Tailwind CSS:** For styling (optional but included).
