@@ -1,43 +1,37 @@
-import { DragEvent, ReactNode, useContext } from 'react';
-import { DragContext } from './DragContext';
+import type { DragEvent, ReactNode } from "react";
+import { useCallback } from "react";
+import { useDragContext } from "./DragContext";
 
-export type DragAreaProps<T> = {
-  items: T[];
-  onChange: (updatedItems: T[]) => void;
-  children: ReactNode;
-};
+type Props<T> = { items: T[]; onChange: (items: T[]) => void; children: ReactNode; as?: "ul" | "div" };
 
-export const DragArea = <T extends { id: string }>({ items, onChange, children }: DragAreaProps<T>) => {
-  const useDragContext = () => {
-    const context = useContext(DragContext);
-    if (!context) {
-      throw new Error('Components DragArea can only use context if they are within a ContextProvider');
-    }
-    return context;
-  };
+export function DragArea<T extends { id: string }>({ items, onChange, children, as: Tag = "ul" }: Props<T>) {
+  const { onDragOver, onDrop } = useDragContext();
 
-  const { onDragOver } = useDragContext();
-
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrop = useCallback((e: DragEvent<HTMLElement>) => {
     e.preventDefault();
-    const draggedItemId = e.dataTransfer.getData('text/plain');
 
-    const draggedIndex = items.findIndex((item) => item.id === draggedItemId);
-    const droppedIndex = parseInt(e.currentTarget.dataset.index ?? '');
+    const draggedId = e.dataTransfer.getData("text/plain");
+    if (!draggedId) return;
 
-    if (draggedIndex === droppedIndex) {
-      return;
-    }
+    const targetEl = (e.target as HTMLElement).closest<HTMLElement>("[data-drag-id]");
+    const droppedId = targetEl?.dataset.dragId;
 
-    const updatedItems = [...items];
-    const [draggedUser] = updatedItems.splice(draggedIndex, 1);
-    updatedItems.splice(droppedIndex, 0, draggedUser);
-    onChange(updatedItems);
-  };
+    const fromIndex = items.findIndex((it) => it.id === draggedId);
+    const toIndex = droppedId ? items.findIndex((it) => it.id === droppedId) : items.length - 1;
+
+    if (fromIndex === -1 || fromIndex === toIndex) return;
+
+    const next = [...items];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+
+    onChange(next);
+    onDrop(draggedId);
+  }, [items, onChange, onDrop]);
 
   return (
-    <div onDrop={handleDrop} onDragOver={onDragOver}>
-      {children}
-    </div>
+      <Tag onDrop={handleDrop} onDragOver={onDragOver}>
+        {children}
+      </Tag>
   );
-};
+}
