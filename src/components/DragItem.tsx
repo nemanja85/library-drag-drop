@@ -1,47 +1,30 @@
-import { DragEvent, FC, ReactNode, useContext, useRef } from 'react';
-import { DragContext } from './DragContext';
+import type { DragEvent, ReactNode } from "react";
+import { useCallback } from "react";
+import { useDragContext } from "./DragContext";
 
-type DragItemProps = {
-  id: string;
-  children: ReactNode;
-};
+type Props = { id: string; children: ReactNode; as?: "li" | "div" };
 
-export const DragItem: FC<DragItemProps> = ({ id, children }) => {
-  const useDragContext = () => {
-    const context = useContext(DragContext);
-    if (!context) {
-      throw new Error('Components DragItem can only use context if they are within a ContextProvider');
-    }
-    return context;
-  };
+export function DragItem({ id, children, as: Tag = "li" }: Props) {
+  const { onDragStart, onDragEnd } = useDragContext();
 
-  const { onDragEnd, onDragStart } = useDragContext();
-
-  const positions = useRef<{ x: number; y: number } | null>(null);
-
-  const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
-    e.dataTransfer.setData('text/plain', id);
+  const handleDragStart = useCallback((e: DragEvent<HTMLElement>) => {
+    e.dataTransfer.setData("text/plain", id);
+    e.dataTransfer.effectAllowed = "move";
     onDragStart(id);
+  }, [id, onDragStart]);
 
-    positions.current = {
-      x: e.clientX,
-      y: e.clientY,
-    };
-  };
-
-  const handleDragEnd = (e: DragEvent<HTMLLIElement>) => {
-    e.dataTransfer.setData('text/plain', id);
+  const handleDragEnd = useCallback(() => {
     onDragEnd(id);
-
-    positions.current = {
-      x: e.clientX,
-      y: e.clientY,
-    };
-  };
+  }, [id, onDragEnd]);
 
   return (
-    <li draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      {children}
-    </li>
+      <Tag
+          draggable
+          data-drag-id={id}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+      >
+        {children}
+      </Tag>
   );
-};
+}

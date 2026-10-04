@@ -1,3 +1,3 @@
-export { DragArea } from './DragArea';
-export { DragContext, DragContextProvider } from './DragContext';
-export { DragItem } from './DragItem';
+export { DragArea } from "./DragArea";
+export { DragContextProvider, useDragContext } from "./DragContext";
+export { DragItem } from "./DragItem";

@@ -1,42 +1,58 @@
-import React, { useState } from 'react';
-import { DragArea, DragContext, DragItem } from './components';
-import users from './users.json';
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import type { DragEvent, ReactNode } from "react";
 
-type UserProps = {
-  name: string;
-  email: string;
+type DragContextValue = {
+    onDragStart: (id: string) => void;
+    onDragEnd: (id: string) => void;
+    onDrop: (id: string) => void;
+    onDragOver: (e: DragEvent<HTMLElement>) => void;
 };
 
-const UserItem = ({ name, email }: UserProps) => {
-  return (
-    <li>
-      <span>{name}</span>
-      <span>{email}</span>
-    </li>
-  );
+const DragContext = createContext<DragContextValue | null>(null);
+
+export function useDragContext() {
+    const ctx = useContext(DragContext);
+    if (!ctx) throw new Error("useDragContext must be used within <DragContextProvider>");
+    return ctx;
+}
+
+type ProviderProps = {
+    children: ReactNode;
+    onDragStart?: (id: string) => void;
+    onDragEnd?: (id: string) => void;
+    onDrop?: (id: string) => void;
 };
 
-export const DraggableUserList = () => {
-  const [exampleUsers, setExampleUsers] = useState(users);
+export function DragContextProvider({ children, onDragStart, onDragEnd, onDrop }: ProviderProps) {
+    const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  return (
-    <DragContext.Provider
-      value={{
-        onDragStart: (id: string) => console.log('Drag started for item: ', id),
-        onDragEnd: () => console.log('Drag ended'),
-        onDrop: (id: string) => console.log('Dropped item: ', id),
-        onDragOver: (e: React.DragEvent<HTMLDivElement>) => e.preventDefault(),
-      }}
-    >
-      <ul>
-        <DragArea items={exampleUsers} onChange={setExampleUsers}>
-          {exampleUsers.map((user, i) => (
-            <DragItem key={user.email} id={user.email}>
-              <UserItem name={user.firstName} email={user.email} />
-            </DragItem>
-          ))}
-        </DragArea>
-      </ul>
-    </DragContext.Provider>
-  );
-};
+    const handleDragStart = useCallback((id: string) => {
+        setDraggingId(id);
+        onDragStart?.(id);
+    }, [onDragStart]);
+
+    const handleDragEnd = useCallback((id: string) => {
+        setDraggingId(null);
+        onDragEnd?.(id);
+    }, [onDragEnd]);
+
+    const handleDrop = useCallback((id: string) => {
+        onDrop?.(id);
+    }, [onDrop]);
+
+    const handleDragOver = useCallback((e: DragEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    }, []);
+
+    const value = useMemo<DragContextValue>(
+        () => ({ onDragStart: handleDragStart, onDragEnd: handleDragEnd, onDrop: handleDrop, onDragOver: handleDragOver }),
+        [handleDragStart, handleDragEnd, handleDrop, handleDragOver],
+    );
+
+    return (
+        <DragContext.Provider value={value}>
+            <div data-dragging-id={draggingId ?? undefined}>{children}</div>
+        </DragContext.Provider>
+    );
+}
